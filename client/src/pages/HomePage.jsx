@@ -45,6 +45,8 @@ export default function HomePage() {
       <div className="w-[40px] mx-16">
         <FilterPop />
       </div>
+      <p>poda manda</p>
+      <p>poda potta</p>
 
       <div className="min-w-[441px] grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-1 p-10">
         {filteredPlaces && filteredPlaces.length > 0 && searchDest.length > 0 && (

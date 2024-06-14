@@ -1,0 +1,4 @@
+#mandan{
+    transition-property: opacity;
+    transition-duration: 3s; /* Adjust the duration as needed */   
+};

@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="text"],input[type="password"], input[type='email']{
+  @apply w-full border my-2 py-2 px-3 rounded-full;
+} 
+
+button {
+  @apply py-1;
+}
+
+body {
+   font-family: "Poppins"; 
+   font-weight: 400;
+}

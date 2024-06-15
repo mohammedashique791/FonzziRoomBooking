@@ -8,13 +8,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 export default function Header() {
   const { user, setUser, pictures, confirm, setConfirm } = useContext(UserContext);
-  const { searchDest, setSearchDest, startDate, endDate } = useContext(LayoutContext);
+  const { searchDest, setSearchDest, startDate, endDate, unbookedPlaces, setUnbookedPlaces, number, setNumber } = useContext(LayoutContext);
   const [isOpen, setisOpen] = useState(false);
   const [redirectFavourites, setRedirectFavourites] = useState(false);
   const [start, setStart] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const fetchSuccess = () => toast('Showing Places are available according to your dates!!!');
+  const fetchSuccess = () => toast(`Showing Places are available according to your dates!!!`);
   const loginAlert = () => toast('You Must be Logged in First');
 
 
@@ -101,8 +101,12 @@ export default function Header() {
     return navigate('/login');
   }
 
-  function handlesubmission(ev) {
+  async function handlesubmission(ev) {
     if (user) {
+      const {data} = await axios.post('/checkinstatus', {startDate, endDate});
+      if(data){
+        setUnbookedPlaces(data);
+      }
       fetchSuccess();
       return navigate('/');
     }

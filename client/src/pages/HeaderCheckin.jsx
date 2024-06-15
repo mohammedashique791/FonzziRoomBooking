@@ -81,7 +81,7 @@ export default function HeaderCheckin() {
                                 </div>
                                 <div className="mt-10">
                                     <p className="text-md font-semibold mb-3">Note:</p>
-                                    <p className="mx-8">This is Just Work in Progress and would be subjected to changes and modifications in the future.</p>
+                                    <p className="mx-8">This is Just work in Progress and would be subjected to changes and modifications in the future.</p>
                                 </div>
                             </div>
                         </div>

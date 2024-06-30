@@ -17,6 +17,7 @@ export default function Layout(){
     const [mininitalValue, setMinInitialValue] = useState(2000);
     const [maxInitialValue, setMaxInitialValue] = useState(100000);
     const [filteredPlaces, setFilteredPlaces] = useState([]);
+    const [availablePlaces, setAvailablePlaces] = useState([]);
     const [checkin, setcheckin] = useState('');
     const [checkout, setcheckout] = useState('');
     const [startDate, setStartDate] = useState(null);
@@ -70,7 +71,7 @@ export default function Layout(){
     }
       
     return(
-        <LayoutContext.Provider value={{showerror, setshowerror, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
+        <LayoutContext.Provider value={{availablePlaces, setAvailablePlaces, showerror, setshowerror, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
         <div className="p-3 flex flex-col relative min-h-screen">
             <Header/>
             <Outlet/>

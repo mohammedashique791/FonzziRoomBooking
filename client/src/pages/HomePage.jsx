@@ -7,7 +7,7 @@ import { LayoutContext } from "../Layout";
 import FilterPop from "./FiltersPopUp";
 export default function HomePage() {
   const { user } = useContext(UserContext);
-  const { searchDest, setSearchDest, sortedPlaces, setFilteredPlaces, filteredPlaces, value, mininitalValue, maxInitialValue, darkmode } = useContext(LayoutContext);
+  const { searchDest, setSearchDest, sortedPlaces, setFilteredPlaces, filteredPlaces, value, mininitalValue, maxInitialValue, darkmode, availablePlaces, setAvailablePlaces } = useContext(LayoutContext);
   // if(!user){
   //   return <Navigate to={'/login'}/>
   // };
@@ -47,7 +47,7 @@ export default function HomePage() {
       </div>
 
       <div className="min-w-[441px] grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-1 p-10">
-        {filteredPlaces && filteredPlaces.length > 0 && searchDest.length > 0 && (
+        {filteredPlaces && filteredPlaces.length > 0 && searchDest.length > 0 && availablePlaces.length === 0 &&(
           <>
             {sortedPlaces.map((place) => (
               <>
@@ -71,7 +71,7 @@ export default function HomePage() {
           </>
         )}
 
-        {filteredPlaces && filteredPlaces.length > 0 && searchDest.length === 0 && (
+        {filteredPlaces && filteredPlaces.length > 0 && searchDest.length === 0 && availablePlaces.length === 0 &&(
           filteredPlaces.map((place) => (
             <>
               <Link to={`/places/${place._id}`} className="flex flex-col p-4 cursor-pointer">
@@ -98,7 +98,7 @@ export default function HomePage() {
             <p className="text-center font-semibold">No Places Found.</p>
           </>
         )}
-        {!searchDest && filteredPlaces && value == '1' && mininitalValue == 2000 && maxInitialValue == 100000 && (
+        {!searchDest && filteredPlaces && value == '1' && mininitalValue == 2000 && maxInitialValue == 100000 && availablePlaces.length === 0 &&(
           places.map((place) => (
             <>
               <Link to={`/places/${place._id}`} className="flex flex-col p-4 cursor-pointer">
@@ -120,7 +120,29 @@ export default function HomePage() {
           ))
         )}
 
-        {searchDest && searchDest.length > 0 && filteredPlaces && filteredPlaces.length === 0 && (
+        {availablePlaces && availablePlaces.length > 0 && (
+          availablePlaces.map((place) => (
+            <>
+              <Link to={`/places/${place._id}`} className="flex flex-col p-4 cursor-pointer">
+                <div className="relative flex w-65 h-60 bg-gray-300 mb-2 rounded-2xl">
+                  {place.photos.length > 0 && (
+                    <img className="rounded-2xl object-cover" src={'http://localhost:3000/uploads/' + place.photos[0]} alt='' />
+                  )}
+                  <div className="absolute right-3 top-3 text-white">
+                    <HomeShowing place={place} user={user} />
+                  </div>
+                </div>
+                <div className="font-semibold text-sm mt-1">
+                  <h4>{place.location}</h4>
+                </div>
+                <p className="text-gray-600 mt-2">Stay with {place.owner.username}</p>
+                <p className="mt-2"><b>₹{place.price}</b> night</p>
+              </Link>
+            </>
+          ))
+        )}
+
+        {searchDest && searchDest.length > 0 && filteredPlaces && filteredPlaces.length === 0 && availablePlaces.length === 0 &&(
           sortedPlaces.map((place) => (
             <>
               <Link to={`/places/${place._id}`} className="flex flex-col p-4 cursor-pointer">

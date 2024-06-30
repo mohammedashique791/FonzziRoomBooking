@@ -8,13 +8,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 export default function Header() {
   const { user, setUser, pictures, confirm, setConfirm } = useContext(UserContext);
-  const { searchDest, setSearchDest, startDate, endDate } = useContext(LayoutContext);
+  const { searchDest, setSearchDest, startDate, endDate, availablePlaces, setAvailablePlaces, setStartDate, setEnddate } = useContext(LayoutContext);
   const [isOpen, setisOpen] = useState(false);
   const [redirectFavourites, setRedirectFavourites] = useState(false);
   const [start, setStart] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const fetchSuccess = () => toast('Showing Places are available according to your dates!!!');
+  const fetchSuccess = () => toast(`Showing ${count} Places are available according to your dates!!!`);
   const loginAlert = () => toast('You Must be Logged in First');
 
 
@@ -39,7 +39,7 @@ export default function Header() {
   }, [confirm]);
 
 
-
+  let count = ''
   //below useEffect is used to reset the value of redirectFavourites!!!
 
   useEffect(() => {
@@ -101,10 +101,13 @@ export default function Header() {
     return navigate('/login');
   }
 
-  function handlesubmission(ev) {
+  async function handlesubmission(ev) {
     if (user) {
+
+      const { data } = await axios.post('/isavailable', { startDate, endDate });
+      setAvailablePlaces(data);
+      count = data.length
       fetchSuccess();
-      return navigate('/');
     }
     else {
       loginAlert();
@@ -112,6 +115,10 @@ export default function Header() {
     }
   }
 
+  function removeEnddate(){
+    setAvailablePlaces([]);
+    setEnddate(null)
+  }
 
   return (
     <div>
@@ -185,16 +192,28 @@ export default function Header() {
             <div className='border border-l border-gray-300'></div>
             <HeaderCheckin />
             <div className='border border-l border-gray-300'></div>
-            <div className="w-1/5 border-r border-gray-400"><button className="flex flex-col"><p className="text-xs">Check out</p><p className="text-gray-500">{endDate === null ? <p>add dates</p> : <p className="font-semibold text-black">{formattingDates(endDate)}</p>}</p></button></div>
+            <div className="w-1/5 border-r border-gray-400 flex gap-2">
+              <button className="flex flex-col"><p className="text-xs">Check out</p><p className="text-gray-500">{endDate === null ? <p>add dates</p> : <p className="font-semibold text-black">{formattingDates(endDate)}</p>}</p></button>
+              {endDate !== null && (
+                <div>
+                  <button onClick={removeEnddate}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-primary">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+              </button>
+                </div>
+              )}
+              
+              </div>
             <div className='border border-l border-gray-300'></div>
             <div className="w-1/5"><button className="flex flex-col"><p className="text-xs">Who</p><p className="text-gray-500">Add guests</p></button></div>
-            <button onClick={() => handlesubmission()} className='bg-primary rounded-full p-4 text-white'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <button onClick={handlesubmission} className='bg-primary rounded-full p-4 text-white'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
               <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
             </svg>
             </button>
           </div>
         )}
-        
+
 
         <div className="min-w-[395px] flex border rounded-xl px-4 items-center block sm:hidden">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">

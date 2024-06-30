@@ -6,7 +6,7 @@ import Layout from './Layout';
 import View from './pages/DetailedView';
 import Register from './pages/Register';
 import User from './pages/UserProfile';
-import axios from 'axios';
+import axios from 'axios';  
 import Owner from './pages/OwnerPage';
 import PhotoView from './pages/PhotoView';
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -36,7 +36,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Layout />}>
       <Route index element = {<HomePage />}/>
-      <Route path='/account' element = {<Account />}/>
+      <Route path='/account' element = {<Account />}/>  
       <Route path='/register' element={<Register />} />
       <Route path='/login' element = {<LoginPage />}/>
       <Route path='/account/:subpages?' element = {<Account/>}/>

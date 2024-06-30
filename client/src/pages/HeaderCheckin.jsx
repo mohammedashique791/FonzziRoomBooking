@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate } from "react-router-dom";
 import { LayoutContext } from "../Layout";
 export default function HeaderCheckin() {
     const [isOpencheckin, setisOpencheckin] = useState(false);
-    const { startDate, setStartDate, endDate, setEnddate } = useContext(LayoutContext);
+    const { startDate, setStartDate, endDate, setEnddate, setAvailablePlaces } = useContext(LayoutContext);
     const [isOpencheckout, setisOpencheckout] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -39,9 +38,27 @@ export default function HeaderCheckin() {
     useEffect(() => {
         setisOpencheckout(false);
     }, [endDate]);
+
+    function removeStartDate(){
+            setAvailablePlaces([]);
+            setStartDate(null)    
+            setisOpencheckin(false);
+            setisOpencheckout(false)   
+    }
     return (
         <>
-            <div className="relative w-1/5 border-r border-gray-400"><button onClick={handleClick} className="flex flex-col"><p className="text-xs">Check in</p><p className="text-gray-500">{startDate === null ? <p>Add dates</p> : <p className="font-semibold text-black">{formattingDates(startDate)}</p>}</p></button>
+        
+            <div className="relative w-1/5 border-r border-gray-400 flex gap-2">
+            <button onClick={handleClick} className="flex flex-col"><p className="text-xs">Check in</p><p className="text-gray-500">{startDate === null ? <p>Add dates</p> : <p className="font-semibold text-black">{formattingDates(startDate)}</p>}</p></button>
+            {startDate !== null && (
+                <div>
+                  <button onClick={removeStartDate}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-primary">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+              </button>
+                </div>
+              )}
             </div>
             {showCalendar && isOpencheckin && (
                 <>

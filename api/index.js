@@ -399,6 +399,23 @@ app.get('/account/edit/details/:id', async (req, res) => {
     res.json(myPlace);
 })
 
+
+app.post('/isavailable', async (req, res) => {
+    const { startDate, endDate } = req.body;
+    const checkinDate = new Date(startDate);
+    const checkoutDate = new Date(endDate);
+    const isBooked = await Booking.find({
+        $or:[
+        { checkin: { $lt: checkoutDate, $gte: checkinDate } },
+        { checkout: { $gt: checkinDate, $lte: checkoutDate } },
+        { checkin: { $lte: checkinDate }, checkout: { $gte: checkoutDate } }
+        ]
+    });
+    const bookedPlacesIds = isBooked.map(booking => booking.place);
+    const availablePlaces = await Places.find({_id: {$nin: bookedPlacesIds}});
+    res.json(availablePlaces);
+});
+
 app.get('/getcommentCount/:id', (req, res) => {
     res.json('ethi molu ivade');
 })
@@ -541,7 +558,7 @@ app.post('/booking', async (req, res) => {
     res.json(response);
 })
 
-app.get('/bookings/details', async(req, res) => {
+app.get('/bookings/details', async (req, res) => {
     const { token } = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, user) => {
         if (err) throw err;
@@ -584,32 +601,32 @@ app.post('/password/validation', (req, res) => {
     }
 });
 
-app.post('/new/preferred/:id', async(req, res)=>{
-    const {id} = req.params;
-    const {name} = req.body;
+app.post('/new/preferred/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
     const theUser = await User.findById(id);
     theUser.preferredname = name;
     await theUser.save();
     res.json(theUser);
 })
 
-app.post('/profile/picture', (req, res)=>{
-    const {profilepic} = req.body;
+app.post('/profile/picture', (req, res) => {
+    const { profilepic } = req.body;
     res.json(profilepic);
-}); 
+});
 
 app.post('/account/remove', async (req, res) => {
     try {
-        const {user} = req.body;
+        const { user } = req.body;
         const id = user._id;
-            await Place.deleteMany({owner: id});
-            const replies = await Reply.find({author: id});
-            const replyIds = replies.map(reply=> reply._id);
-            await Review.updateMany({replies: {$in : replyIds}}, {$pull: {replies: {$in: replyIds}}});
-            await Reply.deleteMany({_id: {$in: replyIds}});
-            await Review.deleteMany({author: id});
-            await User.findByIdAndDelete(id);
-            res.status(200).json({ message: 'Successfully deleted all reviews and replies' });
+        await Place.deleteMany({ owner: id });
+        const replies = await Reply.find({ author: id });
+        const replyIds = replies.map(reply => reply._id);
+        await Review.updateMany({ replies: { $in: replyIds } }, { $pull: { replies: { $in: replyIds } } });
+        await Reply.deleteMany({ _id: { $in: replyIds } });
+        await Review.deleteMany({ author: id });
+        await User.findByIdAndDelete(id);
+        res.status(200).json({ message: 'Successfully deleted all reviews and replies' });
     }
     catch (e) {
         res.status(500).json({ error: 'An error occured while Deactivating this account' });
@@ -682,22 +699,24 @@ app.post('/register', async (req, res) => {
 // });
 
 
-app.post('/isBooked/:id', async(req, res)=>{
-    const {id} = req.params;
-    const {checkin, checkout} = req.body;
+app.post('/isBooked/:id', async (req, res) => {
+    const { id } = req.params;
+    const { checkin, checkout } = req.body;
     const checkinDate = new Date(checkin);
     const checkoutDate = new Date(checkout);
-    const isBooked = await Booking.find({place: id,  $or: [
-        { checkin: { $lt: checkoutDate, $gte: checkinDate } },
-        { checkout: { $gt: checkinDate, $lte: checkoutDate } },
-        { checkin: { $lte: checkinDate }, checkout: { $gte: checkoutDate } },
-      ]});
+    const isBooked = await Booking.find({
+        place: id, $or: [
+            { checkin: { $lt: checkoutDate, $gte: checkinDate } },
+            { checkout: { $gt: checkinDate, $lte: checkoutDate } },
+            { checkin: { $lte: checkinDate }, checkout: { $gte: checkoutDate } },
+        ]
+    });
 
 
-    if(isBooked.length === 0){
+    if (isBooked.length === 0) {
         res.json(false);
     }
-    else{
+    else {
         res.json(true);
     }
 })
@@ -712,21 +731,23 @@ app.post('/isBooked/:id', async(req, res)=>{
 //     price: {type: Number, required: true}
 // });
 
-app.post('/bookedPlaces', async(req, res)=>{
-    const {id} = req.body;
+app.post('/bookedPlaces', async (req, res) => {
+    const { id } = req.body;
     const checkinDate = new Date(Date.now());
-    const response = await Booking.find({place: id, $or: [
-        {checkin: {$gte: checkinDate}},
-        {checkout: {$gte: checkinDate}}
-    ]});
+    const response = await Booking.find({
+        place: id, $or: [
+            { checkin: { $gte: checkinDate } },
+            { checkout: { $gte: checkinDate } }
+        ]
+    });
     res.json(response);
-    
+
 })
 
 
 
-app.post('/user/profilepic/updation', async(req, res)=>{
-    const {temppic, user} = req.body;
+app.post('/user/profilepic/updation', async (req, res) => {
+    const { temppic, user } = req.body;
     const theuser = await User.findById(user._id);
     theuser.profilepic = temppic;
     await theuser.save();
@@ -734,16 +755,16 @@ app.post('/user/profilepic/updation', async(req, res)=>{
 });
 
 
-app.post('/procture', upload.single('avatar'), (req, res)=>{
+app.post('/procture', upload.single('avatar'), (req, res) => {
     let uploadedFiles = "";
-    if(req.file !== undefined){
-    const {path, originalname} = req.file;
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    const newPath = path + '.' + ext;
-    fs.renameSync(path, newPath);
-    uploadedFiles = newPath.replace('uploads\\','');
-    res.json(uploadedFiles);
+    if (req.file !== undefined) {
+        const { path, originalname } = req.file;
+        const parts = originalname.split('.');
+        const ext = parts[parts.length - 1];
+        const newPath = path + '.' + ext;
+        fs.renameSync(path, newPath);
+        uploadedFiles = newPath.replace('uploads\\', '');
+        res.json(uploadedFiles);
     }
 });
 

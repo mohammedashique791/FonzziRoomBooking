@@ -36,6 +36,9 @@ export default function HeaderCheckin() {
         setisOpencheckin(!isOpencheckin);
         setisOpencheckout(true);
         }
+        else{
+            setThisRef(false);
+        }
     }, [startDate]);
 
     useEffect(() => {

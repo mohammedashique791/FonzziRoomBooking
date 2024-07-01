@@ -7,6 +7,7 @@ export default function HeaderCheckin() {
     const { startDate, setStartDate, endDate, setEnddate, setAvailablePlaces } = useContext(LayoutContext);
     const [isOpencheckout, setisOpencheckout] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
+    const [thisRef, setThisRef] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const handleClick = (event) => {
         const rect = event.target.getBoundingClientRect();
@@ -31,8 +32,10 @@ export default function HeaderCheckin() {
     }
 
     useEffect(() => {
+        if(!thisRef){
         setisOpencheckin(!isOpencheckin);
         setisOpencheckout(true);
+        }
     }, [startDate]);
 
     useEffect(() => {
@@ -42,8 +45,7 @@ export default function HeaderCheckin() {
     function removeStartDate(){
             setAvailablePlaces([]);
             setStartDate(null)    
-            setisOpencheckin(false);
-            setisOpencheckout(false)   
+            setThisRef(true)  
     }
     return (
         <>

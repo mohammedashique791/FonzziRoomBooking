@@ -402,7 +402,9 @@ app.get('/account/edit/details/:id', async (req, res) => {
 
 
 app.post('/isavailable', async (req, res) => {
-    const { startDate, endDate } = req.body;
+    const { startDate, endDate, homeGuests } = req.body;
+    let newGuests = parseInt(homeGuests);
+    let availablePlaces = []
     const checkinDate = new Date(startDate);
     const checkoutDate = new Date(endDate);
     const isBooked = await Booking.find({
@@ -413,7 +415,13 @@ app.post('/isavailable', async (req, res) => {
         ]
     });
     const bookedPlacesIds = isBooked.map(booking => booking.place);
-    const availablePlaces = await Places.find({_id: {$nin: bookedPlacesIds}});
+    if(newGuests > 0){
+        availablePlaces = await Places.find({_id: {$nin: bookedPlacesIds}, maxGuests: {$lte: newGuests}});
+    }
+    else{
+        availablePlaces = await Places.find({_id: {$nin: bookedPlacesIds}});
+    }
+    
     res.json(availablePlaces);
 });
 

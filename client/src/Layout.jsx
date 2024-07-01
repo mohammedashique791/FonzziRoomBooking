@@ -27,6 +27,7 @@ export default function Layout(){
     const [phone, setphone] = useState('');
     const [unbookedPlaces, setUnbookedPlaces] = useState([]);
     const [showerror, setshowerror] = useState(false);
+    const [homeGuests, setHomeGuests] = useState('');
 
     useEffect(() => {
         async function grabPlaceDetails() {
@@ -72,7 +73,7 @@ export default function Layout(){
     }
       
     return(
-        <LayoutContext.Provider value={{availablePlaces, setAvailablePlaces, showerror, setshowerror, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
+        <LayoutContext.Provider value={{availablePlaces, setAvailablePlaces, homeGuests, setHomeGuests, showerror, setshowerror, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
         <div className="p-3 flex flex-col relative min-h-screen">
             <Header/>
             <Outlet/>

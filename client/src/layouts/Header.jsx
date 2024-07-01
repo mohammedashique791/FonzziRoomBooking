@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 export default function Header() {
   const { user, setUser, pictures, confirm, setConfirm } = useContext(UserContext);
-  const { searchDest, setSearchDest, startDate, endDate, availablePlaces, setAvailablePlaces, setStartDate, setEnddate } = useContext(LayoutContext);
+  const { searchDest, setSearchDest, startDate, endDate, availablePlaces, setAvailablePlaces, setStartDate, setEnddate,homeGuests, setHomeGuests } = useContext(LayoutContext);
   const [isOpen, setisOpen] = useState(false);
   const [redirectFavourites, setRedirectFavourites] = useState(false);
   const [start, setStart] = useState(false);
@@ -103,7 +103,7 @@ export default function Header() {
 
   async function handlesubmission(ev) {
     if (user) {
-      const { data } = await axios.post('/isavailable', { startDate, endDate });
+      const { data } = await axios.post('/isavailable', { startDate, endDate, homeGuests });
       setAvailablePlaces(data);
       count = data.length
       fetchSuccess();
@@ -205,7 +205,9 @@ export default function Header() {
               
               </div>
             <div className='border border-l border-gray-300'></div>
-            <div className="w-1/5"><button className="flex flex-col"><p className="text-xs">Who</p><p className="text-gray-500">Add guests</p></button></div>
+            <div className="w-1/5 flex items-center"><input onChange={(ev)=> setHomeGuests(ev.target.value)} className="border-none outline-none placeholder:text-primary" type="text" placeholder="Add Guests"/>
+            {homeGuests.length > 0 && <p className="text-primary">Guests</p>}
+            </div>
             <button onClick={handlesubmission} className='bg-primary rounded-full p-4 text-white'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
               <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
             </svg>

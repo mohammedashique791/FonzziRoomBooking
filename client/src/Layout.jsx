@@ -25,6 +25,7 @@ export default function Layout(){
     const [likes, setlikes] = useState(0);
     const [pan, setpan] = useState('');
     const [phone, setphone] = useState('');
+    const [unbookedPlaces, setUnbookedPlaces] = useState([]);
     const [showerror, setshowerror] = useState(false);
 
     useEffect(() => {
@@ -71,7 +72,11 @@ export default function Layout(){
     }
       
     return(
+<<<<<<< HEAD
         <LayoutContext.Provider value={{availablePlaces, setAvailablePlaces, showerror, setshowerror, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
+=======
+        <LayoutContext.Provider value={{showerror, setshowerror, unbookedPlaces, setUnbookedPlaces, darkmode, setdarkmode,  otp, setotp, phone, setphone, pan, setpan, track, setTrack, likes, setlikes, searchDest, setSearchDest, sortedPlaces, perks, setPerks, value, setValue, mininitalValue, setMinInitialValue, maxInitialValue, setMaxInitialValue, filteredPlaces, setFilteredPlaces, checkin, setcheckin, checkout, setcheckout, newDate, setnewDate, startDate, setStartDate, endDate, setEnddate}}>
+>>>>>>> newone
         <div className="p-3 flex flex-col relative min-h-screen">
             <Header/>
             <Outlet/>

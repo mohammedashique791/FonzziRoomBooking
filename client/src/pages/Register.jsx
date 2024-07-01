@@ -41,9 +41,10 @@ export default function Register() {
         return <Navigate to={'/'} />
     }
     return (
-        <div className="mt-16">
-            <h1 className="text-4xl text-center my-10">Register</h1>
-            <form onSubmit={handleSubmit(registerUser)} className="max-w-md mx-auto mt-5">
+        <div className="bg-sixth text-white h-[640px] rounded-xl">
+        <div className="mt-16 border w-1/3 mx-auto rounded-xl shadow shadow-xl shadow-slate-200">
+            <h1 className="text-5xl text-allnew text-center my-10" id='myTarget'>Register</h1>
+            <form onSubmit={handleSubmit(registerUser)} className="max-w-md text-sixth mx-auto mt-5 mb-8">
                 <input value={email} {...register('email', { required: true })} onChange={evt => setEmail(evt.target.value)}
                     type="email" id='email' placeholder="fonzzi@gmail.com" />
                 {errors.email && <p className="text-red-500 ml-3">Your Email is Required.</p>}
@@ -73,12 +74,13 @@ export default function Register() {
                 <div>
                     <input value={secret} onChange={(ev)=> setSecret(ev.target.value)} type="text" placeholder="secret"/>
                 </div>
-                <p className="text-xs mt-2 mx-2"><span className="text-primary">*</span>This secret is used to reset your password if lost or forgotten.</p>
+                <p className="text-xs mt-2 mx-2 text-white"><span className="text-primary">*</span>This secret is used to reset your password if lost or forgotten.</p>
                 {errors.password && <p className="text-red-500 ml-3">Password should contain atleast 8 characters and should contain atleast one '@' and one '$'.</p>}
-                <button className="bg-primary border border-gray-400 rounded-full w-full mt-4 text-white">
+                <button className="bg-allnew border border-gray-400 rounded-full w-full mt-4 text-white">
                     Register</button>
-                <div className="text-center py-2">Already a user? <Link className="underline text-black" to={'/login'}>Login Now</Link></div>
+                <div className="text-center py-2 text-white">Already a user? <Link className="underline text-allnewx" to={'/login'}>Login Now</Link></div>
             </form>
+        </div>
         </div>
     )
 }

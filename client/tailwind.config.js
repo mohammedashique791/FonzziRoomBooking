@@ -20,6 +20,7 @@ export default {
         darkings: '#dddddd',
         newest: '#008489',
         fonzzi: '#192734',
+        allnew: '#35ade1',
       }
     },
   },

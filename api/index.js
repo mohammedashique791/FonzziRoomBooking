@@ -22,6 +22,7 @@ const upload = multer({ dest: 'uploads/' });
 const Pan = require('./models/pan');
 const { Vonage } = require('@vonage/server-sdk');
 const Like = require('./models/like');
+const { start } = require('repl');
 
 const vonage = new Vonage({
     apiKey: "3e8c97d3",
@@ -720,6 +721,54 @@ app.post('/isBooked/:id', async (req, res) => {
         res.json(true);
     }
 })
+
+
+// const placeSchema = new mongoose.Schema({
+//     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+//     location: String,
+//     title: String,
+//     price: Number,
+//     address: String,
+//     photos: [String],
+//     perks: [String],
+//     extraInfo: String,
+//     rating: Number,
+//     description: String,
+//     checkIn: Number,
+//     checkOut: Number,
+//     maxGuests: Number,
+//     review: [
+//         {
+//         type: mongoose.Schema.Types.ObjectId, ref: 'Review'
+//     }
+// ],
+// });
+
+
+
+app.post('/checkinstatus', async (req, res) => {
+    const { startDate, endDate } = req.body;
+    if(!startDate || !endDate){
+        return res.status(200).send({error: 'Checkin and checkout dates required'});
+    }
+    try{
+    const checkinDate = new Date(startDate);
+    const checkoutDate = new Date(endDate);
+    const overlappingBookings = await Booking.find({
+        $or: [
+            { checkin: { $lt: checkoutDate, $gte: checkinDate } },
+            { checkout: { $gt: checkinDate, $lte: checkoutDate } },
+            { checkin: { $lte: checkinDate }, checkout: { $gte: checkoutDate } }
+        ]
+    });
+    const bookedPlaces = overlappingBookings.map((name)=> name.place);
+    const availablePlaces = await Place.find({_id: {$nin: bookedPlaces}});
+    res.json(availablePlaces);
+}
+catch(error){
+    res.status(500).send({error: 'An error occured while fetching available places'});
+}
+});
 
 // const BookingSchema = new mongoose.Schema({
 //     place: {type: mongoose.Schema.Types.ObjectId, ref: 'Places'},

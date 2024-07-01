@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.cdnfonts.com/css/rage-italic');
+@import url('https://fonts.googleapis.com/css2?family=Spicy+Rice&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Spicy+Rice&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,4 +17,9 @@ button {
 body {
    font-family: "Poppins"; 
    font-weight: 400;
+}
+
+#myTarget, #newTar{
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
 }
